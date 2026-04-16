@@ -210,16 +210,119 @@ This skill cites learning science often. Follow these rules every time:
   is building and what 'good' looks like, we can't know what the app needs
   to teach. What are they making?"
 
+## Phase Transition Discipline
+
+These rules apply to every phase boundary in this skill. Violations produce
+the #1 failure mode observed in practice: critiquing or advancing before the
+user has fully completed the current phase, which makes the user feel
+skipped-over and produces a vague Learning Design Brief.
+
+**Rules:**
+
+1. **Finish the current phase before starting the next.** Do not critique
+   the premise, surface framing issues, or jump to the next phase's question
+   while the current phase still has missing or partial answers.
+
+2. **Every phase transition is explicit.** When moving from phase to phase,
+   state it out loud: "Phase N complete. Here's what I have: [summary].
+   Moving to Phase N+1: [what that phase does]." Never silently shift
+   gears.
+
+3. **Audit before advancing.** At the end of each phase, summarize back to
+   the user what was captured. If anything is 🟡 (partial) or ❌ (missing),
+   ask only about those gaps — not the whole phase again.
+
+4. **Critique belongs between phases, not inside them.** If you have a
+   framing issue to raise (e.g., "the topic you picked is too broad to
+   assess"), save it for the phase transition message. Don't interrupt a
+   phase to critique.
+
+5. **No "Phase N, Step M, Q1" jargon without context.** When asking the
+   next question, introduce it: "Stage 1, Q1: the performance. After this
+   experience, what can the learner do..." The user shouldn't have to
+   remember what phase they're in.
+
+6. **If the user feels lost, stop and re-state where you are.** "We're in
+   Stage 2 (designing the assessment). I've got the artifact from Q4. Now
+   we need the rubric — Q5." Orientation is cheap; confusion is expensive.
+
 ## Phase 1: Context
+
+The goal of Phase 1 is a **complete** context brief. Do NOT advance to Stage 1
+(Desired Results) until all four bullets are answered concretely enough to be
+useful downstream. A vague Phase 1 produces a vague Learning Design Brief.
+
+### Step 1.1: Request the brief
 
 Ask the user to state, in one paragraph:
 
-- What they want to design (project, unit, learning sequence, app module)
-- Who it's for (age/experience, self-directed or parent-involved)
-- Constraints (materials budget, tools, timeline, what the app can do)
-- Why now (what prompted this)
+- **What** they want to design (project, unit, learning sequence, app module,
+  standalone course, app feature)
+- **Who** it's for (age range, experience level, self-directed vs.
+  parent-involved, approximate prior knowledge)
+- **Constraints** (materials budget, tools available, timeline, delivery
+  format, what the app/course can do, what it cannot)
+- **Why now** (what prompted this — a gap, a product decision, a specific
+  learner need, a course they want to build)
 
-Don't ask these as four separate questions unless needed.
+Don't ask these as four separate questions upfront — one paragraph is the ask.
+
+### Step 1.2: Audit the brief
+
+After the user responds, run a completeness audit. For each of the four bullets,
+classify the answer as:
+
+- ✅ **Clear** — specific enough to design against
+- 🟡 **Partial** — some signal, but a key detail is missing or hedged
+- ❌ **Missing** — not addressed at all, or answered with "it depends" without
+  committing to a default
+
+Show this audit back to the user, explicitly:
+
+> **Phase 1 audit:**
+> - What: [status + one-line restatement of what you heard, or "missing"]
+> - Who: [status + one-line restatement]
+> - Constraints: [status + one-line restatement]
+> - Why now: [status + one-line restatement]
+
+### Step 1.3: Close the gaps
+
+If ANY bullet is 🟡 or ❌, ask **only about the missing/partial ones**. Do NOT
+re-request the whole paragraph. Do NOT advance to Stage 1 yet. Do NOT start
+critiquing the premise yet.
+
+Example follow-ups:
+- Partial constraints: "You said materials/tools depend on the learner — what's
+  the minimum you can assume everyone has? A laptop? A notebook? Anything
+  physical?"
+- Missing timeline: "How long is this — a one-sitting module, a multi-week
+  unit, a whole course? Self-paced or cohorted?"
+- Vague audience: "15-year-olds with some coding experience vs. 18-year-olds
+  who've never written a line — these produce different designs. Which?"
+- Missing why now: "What made you want to build this *now*? A gap you see in
+  existing courses? A product direction? A specific learner?"
+
+Loop until all four bullets are ✅. A constraint that's explicitly "the learner
+chooses" counts as ✅ — as long as the implications are named (e.g., "materials
+vary per learner, so the summative artifact can't require specific tools").
+
+### Step 1.4: Confirm and transition
+
+Once all four bullets are ✅, state the transition explicitly:
+
+> **Phase 1 complete.** Here's what I have:
+> - What: [restatement]
+> - Who: [restatement]
+> - Constraints: [restatement]
+> - Why now: [restatement]
+>
+> Before we hit Stage 1, I have [N] framing issues worth flagging based on this
+> context — [brief 1-line previews]. Then we'll design the summative
+> performance. Ready?
+
+If the user confirms, proceed to premise-level critique (if any) and then
+Phase 2. If the user wants to change any of the Phase 1 facts, update and
+re-confirm before moving.
 
 ## Phase 2: Stage 1 — Desired Results
 
