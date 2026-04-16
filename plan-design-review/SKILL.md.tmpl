@@ -73,6 +73,10 @@ the designer is available and you should use it.
 7. Accessibility is not optional. Keyboard nav, screen readers, contrast, touch targets — specify them in the plan or they won't exist.
 8. Subtraction default. If a UI element doesn't earn its pixels, cut it. Feature bloat kills products faster than missing features.
 9. Trust is earned at the pixel level. Every interface decision either builds or erodes user trust.
+10. Cognitive load respects the learner's age. A 14-year-old processes information differently than a 25-year-old. Chunk content, limit choices per screen, and never assume sustained attention beyond 10-15 minutes without an interaction break.
+11. Engagement without manipulation. Gamification serves learning, not addiction. Points, streaks, and badges must reinforce mastery, not dopamine loops. If removing the game layer makes the content worthless, the content is the problem.
+12. Reading level is a design decision. Write for a 7th-8th grade reading level. Never use "simply," "just," "obviously," or "easy" — these words shame learners who are struggling. Every instruction should be testable: can a 13-year-old follow it without asking an adult?
+13. Home safety is a first-class constraint. Every project involves physical tools and materials in an unsupervised home setting. Safety instructions are not supplementary — they are part of the core design, not an afterthought.
 
 ## Cognitive Patterns — How Great Designers See
 
@@ -326,6 +330,16 @@ Surface ambiguities that will haunt implementation:
 If visual mockups were generated in Step 0.5, reference them as evidence when surfacing unresolved decisions. A mockup makes decisions concrete — e.g., "Your approved mockup shows a sidebar nav, but the plan doesn't specify mobile behavior. What happens to this sidebar on 375px?"
 Each decision = one AskUserQuestion with recommendation + WHY + alternatives. Edit the plan with each decision as it's made.
 
+### Pass 8: Education & Learner Experience (if learning content in scope)
+Rate 0-10: Does the plan account for the learner's experience as a self-directed teen?
+FIX TO 10: Evaluate against these dimensions:
+- **Cognitive load**: How many new concepts per screen? Is there chunking? Interaction breaks?
+- **Reading level**: Run key instructional text through a readability check. Target 7th-8th grade.
+- **Safety prominence**: Are tool/material safety warnings placed BEFORE the step that uses them, not in a footer?
+- **Independence**: Can the learner complete this without asking a parent or teacher for help?
+- **Gamification ethics**: Do any engagement mechanics (points, streaks, badges) reinforce learning or just engagement?
+**STOP.** AskUserQuestion once per issue. Do NOT batch. Recommend + WHY.
+
 ### Post-Pass: Update Mockups (if generated)
 
 If mockups were generated in Step 0.5 and review passes changed significant design decisions (information architecture restructure, new states, layout changes), offer to regenerate (one-shot, not a loop):
@@ -379,6 +393,7 @@ Then present options: **A)** Add to TODOS.md **B)** Skip — not valuable enough
   | Pass 5  (Design Sys) | ___/10 → ___/10 after fixes                |
   | Pass 6  (Responsive) | ___/10 → ___/10 after fixes                |
   | Pass 7  (Decisions)  | ___ resolved, ___ deferred                 |
+  | Pass 8  (Education)  | ___/10 → ___/10 after fixes                |
   +--------------------------------------------------------------------+
   | NOT in scope         | written (___ items)                         |
   | What already exists  | written                                     |
