@@ -7,6 +7,14 @@
 
 set -e
 
+# The Node.js-compatible server bundle is only used on Windows, where
+# Bun cannot launch Chromium. Skip on macOS and Linux — Bun runs the
+# server directly on those platforms.
+case "$(uname -s)" in
+  MINGW*|MSYS*|CYGWIN*|Windows_NT) ;;
+  *) echo "Skipping Node server bundle (Windows-only fallback)."; exit 0 ;;
+esac
+
 NSTACK_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 SRC_DIR="$NSTACK_DIR/browse/src"
 DIST_DIR="$NSTACK_DIR/browse/dist"
