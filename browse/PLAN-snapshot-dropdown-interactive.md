@@ -92,7 +92,7 @@ New test cases:
 ## Testing
 
 ```bash
-cd /data/gstack/browse && bun test snapshot
+cd /data/nstack/browse && bun test snapshot
 ```
 
 ## Files Changed

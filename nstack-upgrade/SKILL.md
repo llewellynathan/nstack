@@ -1,25 +1,23 @@
 ---
-name: gstack-upgrade
+name: nstack-upgrade
 version: 1.1.0
 description: |
-  Upgrade gstack to the latest version. Detects global vs vendored install,
-  runs the upgrade, and shows what's new. Use when asked to "upgrade gstack",
-  "update gstack", or "get latest version".
-voice-triggers:
-  - "upgrade the tools"
-  - "update the tools"
-  - "gee stack upgrade"
-  - "g stack upgrade"
+  Upgrade nstack to the latest version. Detects global vs vendored install,
+  runs the upgrade, and shows what's new. Use when asked to "upgrade nstack",
+  "update nstack", or "get latest version".
+  Voice triggers (speech-to-text aliases): "upgrade the tools", "update the tools", "gee stack upgrade", "g stack upgrade".
 allowed-tools:
   - Bash
   - Read
   - Write
   - AskUserQuestion
 ---
+<!-- AUTO-GENERATED from SKILL.md.tmpl — do not edit directly -->
+<!-- Regenerate: bun run gen:skill-docs -->
 
-# /gstack-upgrade
+# /nstack-upgrade
 
-Upgrade gstack to the latest version and show what's new.
+Upgrade nstack to the latest version and show what's new.
 
 ## Inline upgrade flow
 
@@ -30,28 +28,28 @@ This section is referenced by all skill preambles when they detect `UPGRADE_AVAI
 First, check if auto-upgrade is enabled:
 ```bash
 _AUTO=""
-[ "${GSTACK_AUTO_UPGRADE:-}" = "1" ] && _AUTO="true"
-[ -z "$_AUTO" ] && _AUTO=$(~/.claude/skills/gstack/bin/gstack-config get auto_upgrade 2>/dev/null || true)
+[ "${NSTACK_AUTO_UPGRADE:-}" = "1" ] && _AUTO="true"
+[ -z "$_AUTO" ] && _AUTO=$(~/.claude/skills/nstack/bin/nstack-config get auto_upgrade 2>/dev/null || true)
 echo "AUTO_UPGRADE=$_AUTO"
 ```
 
-**If `AUTO_UPGRADE=true` or `AUTO_UPGRADE=1`:** Skip AskUserQuestion. Log "Auto-upgrading gstack v{old} → v{new}..." and proceed directly to Step 2. If `./setup` fails during auto-upgrade, restore from backup (`.bak` directory) and warn the user: "Auto-upgrade failed — restored previous version. Run `/gstack-upgrade` manually to retry."
+**If `AUTO_UPGRADE=true` or `AUTO_UPGRADE=1`:** Skip AskUserQuestion. Log "Auto-upgrading nstack v{old} → v{new}..." and proceed directly to Step 2. If `./setup` fails during auto-upgrade, restore from backup (`.bak` directory) and warn the user: "Auto-upgrade failed — restored previous version. Run `/nstack-upgrade` manually to retry."
 
 **Otherwise**, use AskUserQuestion:
-- Question: "gstack **v{new}** is available (you're on v{old}). Upgrade now?"
+- Question: "nstack **v{new}** is available (you're on v{old}). Upgrade now?"
 - Options: ["Yes, upgrade now", "Always keep me up to date", "Not now", "Never ask again"]
 
 **If "Yes, upgrade now":** Proceed to Step 2.
 
 **If "Always keep me up to date":**
 ```bash
-~/.claude/skills/gstack/bin/gstack-config set auto_upgrade true
+~/.claude/skills/nstack/bin/nstack-config set auto_upgrade true
 ```
 Tell user: "Auto-upgrade enabled. Future updates will install automatically." Then proceed to Step 2.
 
 **If "Not now":** Write snooze state with escalating backoff (first snooze = 24h, second = 48h, third+ = 1 week), then continue with the current skill. Do not mention the upgrade again.
 ```bash
-_SNOOZE_FILE=~/.gstack/update-snoozed
+_SNOOZE_FILE=~/.nstack/update-snoozed
 _REMOTE_VER="{new}"
 _CUR_LEVEL=0
 if [ -f "$_SNOOZE_FILE" ]; then
@@ -67,38 +65,38 @@ echo "$_REMOTE_VER $_NEW_LEVEL $(date +%s)" > "$_SNOOZE_FILE"
 ```
 Note: `{new}` is the remote version from the `UPGRADE_AVAILABLE` output — substitute it from the update check result.
 
-Tell user the snooze duration: "Next reminder in 24h" (or 48h or 1 week, depending on level). Tip: "Set `auto_upgrade: true` in `~/.gstack/config.yaml` for automatic upgrades."
+Tell user the snooze duration: "Next reminder in 24h" (or 48h or 1 week, depending on level). Tip: "Set `auto_upgrade: true` in `~/.nstack/config.yaml` for automatic upgrades."
 
 **If "Never ask again":**
 ```bash
-~/.claude/skills/gstack/bin/gstack-config set update_check false
+~/.claude/skills/nstack/bin/nstack-config set update_check false
 ```
-Tell user: "Update checks disabled. Run `~/.claude/skills/gstack/bin/gstack-config set update_check true` to re-enable."
+Tell user: "Update checks disabled. Run `~/.claude/skills/nstack/bin/nstack-config set update_check true` to re-enable."
 Continue with the current skill.
 
 ### Step 2: Detect install type
 
 ```bash
-if [ -d "$HOME/.claude/skills/gstack/.git" ]; then
+if [ -d "$HOME/.claude/skills/nstack/.git" ]; then
   INSTALL_TYPE="global-git"
-  INSTALL_DIR="$HOME/.claude/skills/gstack"
-elif [ -d "$HOME/.gstack/repos/gstack/.git" ]; then
+  INSTALL_DIR="$HOME/.claude/skills/nstack"
+elif [ -d "$HOME/.nstack/repos/nstack/.git" ]; then
   INSTALL_TYPE="global-git"
-  INSTALL_DIR="$HOME/.gstack/repos/gstack"
-elif [ -d ".claude/skills/gstack/.git" ]; then
+  INSTALL_DIR="$HOME/.nstack/repos/nstack"
+elif [ -d ".claude/skills/nstack/.git" ]; then
   INSTALL_TYPE="local-git"
-  INSTALL_DIR=".claude/skills/gstack"
-elif [ -d ".agents/skills/gstack/.git" ]; then
+  INSTALL_DIR=".claude/skills/nstack"
+elif [ -d ".agents/skills/nstack/.git" ]; then
   INSTALL_TYPE="local-git"
-  INSTALL_DIR=".agents/skills/gstack"
-elif [ -d ".claude/skills/gstack" ]; then
+  INSTALL_DIR=".agents/skills/nstack"
+elif [ -d ".claude/skills/nstack" ]; then
   INSTALL_TYPE="vendored"
-  INSTALL_DIR=".claude/skills/gstack"
-elif [ -d "$HOME/.claude/skills/gstack" ]; then
+  INSTALL_DIR=".claude/skills/nstack"
+elif [ -d "$HOME/.claude/skills/nstack" ]; then
   INSTALL_TYPE="vendored-global"
-  INSTALL_DIR="$HOME/.claude/skills/gstack"
+  INSTALL_DIR="$HOME/.claude/skills/nstack"
 else
-  echo "ERROR: gstack not found"
+  echo "ERROR: nstack not found"
   exit 1
 fi
 echo "Install type: $INSTALL_TYPE at $INSTALL_DIR"
@@ -132,9 +130,9 @@ If `$STASH_OUTPUT` contains "Saved working directory", warn the user: "Note: loc
 ```bash
 PARENT=$(dirname "$INSTALL_DIR")
 TMP_DIR=$(mktemp -d)
-git clone --depth 1 https://github.com/garrytan/gstack.git "$TMP_DIR/gstack"
+git clone --depth 1 https://github.com/garrytan/nstack.git "$TMP_DIR/nstack"
 mv "$INSTALL_DIR" "$INSTALL_DIR.bak"
-mv "$TMP_DIR/gstack" "$INSTALL_DIR"
+mv "$TMP_DIR/nstack" "$INSTALL_DIR"
 cd "$INSTALL_DIR" && ./setup
 rm -rf "$INSTALL_DIR.bak" "$TMP_DIR"
 ```
@@ -145,47 +143,47 @@ Use the install directory from Step 2. Check if there's also a local vendored co
 
 ```bash
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
-LOCAL_GSTACK=""
-if [ -n "$_ROOT" ] && [ -d "$_ROOT/.claude/skills/gstack" ]; then
-  _RESOLVED_LOCAL=$(cd "$_ROOT/.claude/skills/gstack" && pwd -P)
+LOCAL_NSTACK=""
+if [ -n "$_ROOT" ] && [ -d "$_ROOT/.claude/skills/nstack" ]; then
+  _RESOLVED_LOCAL=$(cd "$_ROOT/.claude/skills/nstack" && pwd -P)
   _RESOLVED_PRIMARY=$(cd "$INSTALL_DIR" && pwd -P)
   if [ "$_RESOLVED_LOCAL" != "$_RESOLVED_PRIMARY" ]; then
-    LOCAL_GSTACK="$_ROOT/.claude/skills/gstack"
+    LOCAL_NSTACK="$_ROOT/.claude/skills/nstack"
   fi
 fi
-_TEAM_MODE=$(~/.claude/skills/gstack/bin/gstack-config get team_mode 2>/dev/null || echo "false")
-echo "LOCAL_GSTACK=$LOCAL_GSTACK"
+_TEAM_MODE=$(~/.claude/skills/nstack/bin/nstack-config get team_mode 2>/dev/null || echo "false")
+echo "LOCAL_NSTACK=$LOCAL_NSTACK"
 echo "TEAM_MODE=$_TEAM_MODE"
 ```
 
-**If `LOCAL_GSTACK` is non-empty AND `TEAM_MODE` is `true`:** Remove the vendored copy. Team mode uses the global install as the single source of truth.
+**If `LOCAL_NSTACK` is non-empty AND `TEAM_MODE` is `true`:** Remove the vendored copy. Team mode uses the global install as the single source of truth.
 
 ```bash
 cd "$_ROOT"
-git rm -r --cached .claude/skills/gstack/ 2>/dev/null || true
-if ! grep -qF '.claude/skills/gstack/' .gitignore 2>/dev/null; then
-  echo '.claude/skills/gstack/' >> .gitignore
+git rm -r --cached .claude/skills/nstack/ 2>/dev/null || true
+if ! grep -qF '.claude/skills/nstack/' .gitignore 2>/dev/null; then
+  echo '.claude/skills/nstack/' >> .gitignore
 fi
-rm -rf "$LOCAL_GSTACK"
+rm -rf "$LOCAL_NSTACK"
 ```
-Tell user: "Removed vendored copy at `$LOCAL_GSTACK` (team mode active — global install is the source of truth). Commit the `.gitignore` change when ready."
+Tell user: "Removed vendored copy at `$LOCAL_NSTACK` (team mode active — global install is the source of truth). Commit the `.gitignore` change when ready."
 
-**If `LOCAL_GSTACK` is non-empty AND `TEAM_MODE` is NOT `true`:** Update it by copying from the freshly-upgraded primary install (same approach as README vendored install):
+**If `LOCAL_NSTACK` is non-empty AND `TEAM_MODE` is NOT `true`:** Update it by copying from the freshly-upgraded primary install (same approach as README vendored install):
 ```bash
-mv "$LOCAL_GSTACK" "$LOCAL_GSTACK.bak"
-cp -Rf "$INSTALL_DIR" "$LOCAL_GSTACK"
-rm -rf "$LOCAL_GSTACK/.git"
-cd "$LOCAL_GSTACK" && ./setup
-rm -rf "$LOCAL_GSTACK.bak"
+mv "$LOCAL_NSTACK" "$LOCAL_NSTACK.bak"
+cp -Rf "$INSTALL_DIR" "$LOCAL_NSTACK"
+rm -rf "$LOCAL_NSTACK/.git"
+cd "$LOCAL_NSTACK" && ./setup
+rm -rf "$LOCAL_NSTACK.bak"
 ```
-Tell user: "Also updated vendored copy at `$LOCAL_GSTACK` — commit `.claude/skills/gstack/` when you're ready."
+Tell user: "Also updated vendored copy at `$LOCAL_NSTACK` — commit `.claude/skills/nstack/` when you're ready."
 
 If `./setup` fails, restore from backup and warn the user:
 ```bash
-rm -rf "$LOCAL_GSTACK"
-mv "$LOCAL_GSTACK.bak" "$LOCAL_GSTACK"
+rm -rf "$LOCAL_NSTACK"
+mv "$LOCAL_NSTACK.bak" "$LOCAL_NSTACK"
 ```
-Tell user: "Sync failed — restored previous version at `$LOCAL_GSTACK`. Run `/gstack-upgrade` manually to retry."
+Tell user: "Sync failed — restored previous version at `$LOCAL_NSTACK`. Run `/nstack-upgrade` manually to retry."
 
 ### Step 4.75: Run version migrations
 
@@ -194,7 +192,7 @@ and new version. Migrations handle state fixes that `./setup` alone can't cover
 (stale config, orphaned files, directory structure changes).
 
 ```bash
-MIGRATIONS_DIR="$INSTALL_DIR/gstack-upgrade/migrations"
+MIGRATIONS_DIR="$INSTALL_DIR/nstack-upgrade/migrations"
 if [ -d "$MIGRATIONS_DIR" ]; then
   for migration in $(find "$MIGRATIONS_DIR" -maxdepth 1 -name 'v*.sh' -type f 2>/dev/null | sort -V); do
     # Extract version from filename: v0.15.2.0.sh → 0.15.2.0
@@ -209,17 +207,17 @@ if [ -d "$MIGRATIONS_DIR" ]; then
 fi
 ```
 
-Migrations are idempotent bash scripts in `gstack-upgrade/migrations/`. Each is named
+Migrations are idempotent bash scripts in `nstack-upgrade/migrations/`. Each is named
 `v{VERSION}.sh` and runs only when upgrading from an older version. See CONTRIBUTING.md
 for how to add new migrations.
 
 ### Step 5: Write marker + clear cache
 
 ```bash
-mkdir -p ~/.gstack
-echo "$OLD_VERSION" > ~/.gstack/just-upgraded-from
-rm -f ~/.gstack/last-update-check
-rm -f ~/.gstack/update-snoozed
+mkdir -p ~/.nstack
+echo "$OLD_VERSION" > ~/.nstack/just-upgraded-from
+rm -f ~/.nstack/last-update-check
+rm -f ~/.nstack/update-snoozed
 ```
 
 ### Step 6: Show What's New
@@ -228,7 +226,7 @@ Read `$INSTALL_DIR/CHANGELOG.md`. Find all version entries between the old versi
 
 Format:
 ```
-gstack v{new} — upgraded from v{old}!
+nstack v{new} — upgraded from v{old}!
 
 What's new:
 - [bullet 1]
@@ -246,12 +244,12 @@ After showing What's New, continue with whatever skill the user originally invok
 
 ## Standalone usage
 
-When invoked directly as `/gstack-upgrade` (not from a preamble):
+When invoked directly as `/nstack-upgrade` (not from a preamble):
 
 1. Force a fresh update check (bypass cache):
 ```bash
-~/.claude/skills/gstack/bin/gstack-update-check --force 2>/dev/null || \
-.claude/skills/gstack/bin/gstack-update-check --force 2>/dev/null || true
+~/.claude/skills/nstack/bin/nstack-update-check --force 2>/dev/null || \
+.claude/skills/nstack/bin/nstack-update-check --force 2>/dev/null || true
 ```
 Use the output to determine if an upgrade is available.
 
@@ -259,19 +257,19 @@ Use the output to determine if an upgrade is available.
 
 3. If no output (primary is up to date): check for a stale local vendored copy.
 
-Run the Step 2 bash block above to detect the primary install type and directory (`INSTALL_TYPE` and `INSTALL_DIR`). Then run the Step 4.5 detection bash block above to check for a local vendored copy (`LOCAL_GSTACK`) and team mode status (`TEAM_MODE`).
+Run the Step 2 bash block above to detect the primary install type and directory (`INSTALL_TYPE` and `INSTALL_DIR`). Then run the Step 4.5 detection bash block above to check for a local vendored copy (`LOCAL_NSTACK`) and team mode status (`TEAM_MODE`).
 
-**If `LOCAL_GSTACK` is empty** (no local vendored copy): tell the user "You're already on the latest version (v{version})."
+**If `LOCAL_NSTACK` is empty** (no local vendored copy): tell the user "You're already on the latest version (v{version})."
 
-**If `LOCAL_GSTACK` is non-empty AND `TEAM_MODE` is `true`:** Remove the vendored copy using the Step 4.5 team-mode removal bash block above. Tell user: "Global v{version} is up to date. Removed stale vendored copy (team mode active). Commit the `.gitignore` change when ready."
+**If `LOCAL_NSTACK` is non-empty AND `TEAM_MODE` is `true`:** Remove the vendored copy using the Step 4.5 team-mode removal bash block above. Tell user: "Global v{version} is up to date. Removed stale vendored copy (team mode active). Commit the `.gitignore` change when ready."
 
-**If `LOCAL_GSTACK` is non-empty AND `TEAM_MODE` is NOT `true`**, compare versions:
+**If `LOCAL_NSTACK` is non-empty AND `TEAM_MODE` is NOT `true`**, compare versions:
 ```bash
 PRIMARY_VER=$(cat "$INSTALL_DIR/VERSION" 2>/dev/null || echo "unknown")
-LOCAL_VER=$(cat "$LOCAL_GSTACK/VERSION" 2>/dev/null || echo "unknown")
+LOCAL_VER=$(cat "$LOCAL_NSTACK/VERSION" 2>/dev/null || echo "unknown")
 echo "PRIMARY=$PRIMARY_VER LOCAL=$LOCAL_VER"
 ```
 
-**If versions differ:** follow the Step 4.5 sync bash block above to update the local copy from the primary. Tell user: "Global v{PRIMARY_VER} is up to date. Updated local vendored copy from v{LOCAL_VER} → v{PRIMARY_VER}. Commit `.claude/skills/gstack/` when you're ready."
+**If versions differ:** follow the Step 4.5 sync bash block above to update the local copy from the primary. Tell user: "Global v{PRIMARY_VER} is up to date. Updated local vendored copy from v{LOCAL_VER} → v{PRIMARY_VER}. Commit `.claude/skills/nstack/` when you're ready."
 
 **If versions match:** tell the user "You're on the latest version (v{PRIMARY_VER}). Global and local vendored copy are both up to date."
