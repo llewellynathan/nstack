@@ -116,6 +116,95 @@ and driving traits. The user can add, remove, or edit before the run.
    dangerous or unclear, both Noor and the parent freeze. Motivation:
    proving she can do grown-up things.
 
+## Phase Transition Discipline
+
+Simulation is different from review in one specific way: a persona silently
+dropped is invisible in the final report — the reader sees five summaries
+and assumes five personas were actually walked. Missed passes produce the
+same failure mode: the report looks complete but isn't.
+
+**Rules, applied to every phase boundary:**
+
+1. **No persona skipped silently.** If a selected persona doesn't get
+   walked, the Phase 3 report must name them in "Personas not run" with a
+   specific reason. "Ran out of context" counts as a reason; "forgot"
+   doesn't — go back and run them.
+
+2. **Every persona gets both Pass A and Pass B, or has an explicit reason
+   not to.** A legitimate reason: the persona would quit during Pass A
+   (note the quit point). Not a reason: "already got the idea from Pass A"
+   — Pass B surfaces different issues (materials, setting, tool access)
+   that Pass A can't.
+
+3. **Finish the current phase before starting the next.** Do not draft the
+   cross-persona report while a persona's walkthrough is still partial. Do
+   not start a new persona while the previous one's summary is unwritten.
+
+4. **Every phase transition is explicit.** State it out loud: "Phase N
+   complete. [counts]. Moving to Phase N+1." No silent shifts — including
+   between Pass A and Pass B within a single persona.
+
+5. **The cross-persona report counts must match persona count.** Selected
+   personas = walked personas + explicitly-skipped personas. If the
+   arithmetic doesn't work, a persona fell through the cracks.
+
+6. **If the user feels lost, re-state where you are.** "We're in Phase 2,
+   walking Kai through Pass B (project guide). 3 of 5 personas complete,
+   next up is Noor." Orientation is cheap; a missed persona in a
+   simulation report is invisible until a real learner hits the same wall.
+
+## Phase 0: Prerequisites Gate
+
+Do NOT run any phase until inputs are confirmed to exist. A simulation
+against missing or partial inputs produces a report that looks thorough
+but evaluates against the wrong target — worse than no simulation.
+
+### Step 0.1: Verify curriculum package exists
+
+Check the three required curriculum artifacts:
+
+1. **App content spec** at `curriculum/{unit-slug}/app-content.md`.
+   Required for Pass A.
+2. **Project guide** at `curriculum/{unit-slug}/project-guide.md`.
+   Required for Pass B.
+3. **Materials list** at `curriculum/{unit-slug}/materials.md`. Required
+   for the access check (can this persona get these materials?).
+
+If any are missing, **stop immediately**. Tell the user which file is
+missing and route back to `/curriculum-dev`. Do not proceed with a partial
+package — the walkthrough needs all three to produce an honest report.
+
+### Step 0.2: Verify the Learning Design Brief
+
+Check the LDB at `design-docs/learning-brief-*.md` (or wherever
+`/learning-architect` wrote it). The LDB is the evaluation anchor — every
+persona is scored against it. Confirm specifically:
+
+- **Summative task** is present and concrete (a drafted artifact, not a
+  description of what evidence might look like).
+- **Rubric** is present with named dimensions and observable criteria
+  (strong / developing / not yet).
+- **Learner profile** is present (age range, experience level, setting) —
+  needed to know whether the default persona roster is a fit.
+
+If the LDB is missing or the summative task + rubric are not locked down,
+**stop** and route back to `/learning-architect`. A simulation without a
+rubric to score against can only report "did they finish?" — which is the
+wrong question.
+
+### Step 0.3: Confirm and transition
+
+Once all inputs are present, state it:
+
+> **Phase 0 complete.** Inputs verified:
+> - App content: [path]
+> - Project guide: [path]
+> - Materials: [path]
+> - LDB: [path] (summative task + rubric confirmed)
+> - Learner profile from LDB: [age, experience, setting]
+>
+> Moving to Phase 1: Ingest.
+
 ## Phase 1: Ingest
 
 Read the curriculum package. Read the LDB — specifically the summative task
@@ -125,6 +214,8 @@ rubric?" The LDB also tells you what the content is supposed to teach, which
 helps distinguish "the learner was confused" from "the learner missed the
 point."
 
+### Step 1.1: Gather run parameters
+
 Confirm via AskUserQuestion:
 
 - Which personas to run (default: all six)
@@ -133,9 +224,51 @@ Confirm via AskUserQuestion:
 - Run depth: "quick read" (scan for top issues) or "full walkthrough"
   (simulate step by step through both app content and project guide)
 
+### Step 1.2: Ingest audit
+
+Before advancing to Phase 2, classify each input with ✅/🟡/❌ and show the
+audit back to the user:
+
+- ✅ **Clear** — locked in, ready to run
+- 🟡 **Partial** — some signal, but a detail is ambiguous
+- ❌ **Missing** — not answered, or "whatever you think"
+
+> **Phase 1 audit:**
+> - Personas to run: [status + list, e.g. "✅ 5 of 6 — Marcus skipped"]
+> - Persona edits: [status + what changed, or "✅ none"]
+> - Additional personas: [status + name/profile, or "✅ none"]
+> - Run depth: [status + "quick read" or "full walkthrough"]
+
+### Step 1.3: Close the gaps
+
+If ANY row is 🟡 or ❌, ask only about the missing/partial ones. Do NOT
+re-request the whole set. Example follow-ups:
+
+- Ambiguous persona edit: "You said 'make Elise a bit younger' — specific
+  age? 13? 12?"
+- Missing depth: "Quick read (I scan and flag top issues) or full
+  walkthrough (I simulate every step for every persona)? Full is slower
+  but catches more."
+- Vague additional persona: "You mentioned 'a kid who gives up fast' —
+  need a name, age, setting, and one driving trait to play them."
+
+Loop until all four rows are ✅.
+
+### Step 1.4: Confirm and transition
+
+Once all four rows are ✅, state the transition explicitly:
+
+> **Phase 1 complete.** Running [N] personas at [depth] against summative
+> task from the LDB. Moving to Phase 2: Walkthrough Per Persona.
+
 ## Phase 2: Walkthrough Per Persona
 
-For each selected persona, simulate two passes:
+For each selected persona, simulate two passes (Pass A then Pass B), then
+write the per-persona summary before moving to the next persona. Do not
+interleave personas — finish one before starting the next.
+
+Before starting each persona, announce:
+> **Starting [persona name] ([age, setting]).** Pass A (app content) first.
 
 ### Pass A: The App Content
 
@@ -150,6 +283,17 @@ Walk through `app-content.md` as the persona. For each concept block, note:
 - **Feedback loop check:** when they get a practice item wrong, does the
   app's feedback actually help *this* learner? Or does it repeat the same
   explanation they already didn't understand?
+
+Before moving on, announce:
+> **Pass A complete for [persona].** [one-line summary: e.g. "made it
+> through, 2 confusion points" or "would close the app at concept block 3"].
+> Moving to Pass B (project guide)...
+
+If the persona would close the app during Pass A and never open the guide,
+say so explicitly and skip Pass B with a reason:
+> **Pass A complete for [persona]. Would quit before reaching the project
+> guide.** Skipping Pass B — quit point noted. Moving to per-persona
+> summary.
 
 ### Pass B: The Project Guide
 
@@ -188,6 +332,40 @@ After both passes:
   the LDB after finishing? If not, where did the generalizable idea get lost?
 - **Access check** — any material, tool, or workspace barrier specific to
   this persona's living situation.
+
+### Per-Persona Completion Check
+
+After writing the summary for each persona, verify before moving to the
+next:
+
+- Pass A walked (or explicit skip reason recorded)? [✓/✗]
+- Pass B walked (or explicit skip reason recorded — e.g. quit during Pass
+  A)? [✓/✗]
+- Per-persona summary written (all six bullets: voice, motivation,
+  vocabulary, summative prediction, transfer, access)? [✓/✗]
+
+If any row is ✗, close the gap before announcing the persona done. Then
+announce:
+> **[Persona] complete.** [walked / stopped at Pass A quit-point / stopped
+> at step N of Pass B]. [K of N personas done.] Moving to [next persona]
+> / [Phase 3 if last].
+
+### Phase 2 → Phase 3 Gate
+
+Before writing the cross-persona report, verify the walkthrough is
+complete for every selected persona. Build the roster check:
+
+| Persona | Walked | Stopped at quit-point | Skipped (reason) |
+|---------|--------|-----------------------|-------------------|
+
+Every selected persona from Phase 1 must appear in exactly one column.
+The arithmetic must close: `selected = walked + stopped + skipped`. If a
+persona is missing, go back and run them (or record an explicit skip
+reason — "forgot" doesn't count).
+
+Once the roster is complete, announce:
+> **Phase 2 complete.** [N] personas walked, [M] stopped at quit-point,
+> [K] skipped (with reasons). Moving to Phase 3: Cross-Persona Report.
 
 ## Phase 3: Cross-Persona Report
 
@@ -242,18 +420,34 @@ Suggested owner: /curriculum-dev / /learning-architect / /maker-safety
   younger/less-experienced profiles}
 ```
 
-## Phase 4: Anti-Sycophancy Check
+## Phase 4: Anti-Sycophancy Gate (Pre-Handoff)
 
-Before delivering the report, verify:
+This is a pre-handoff gate, not a self-audit after the fact. **Before
+finalizing the report and handing it off to the user, verify each of the
+criteria below. If ANY fail, revise the report before handoff — do not
+ship a report that misses these.**
 
-- You did not soften findings to be kind. Severity is based on learning
-  impact, not tone.
-- You named at least one "what's working" item so the report is balanced
-  and actionable.
-- You did not invent persona behavior that isn't grounded in the trait
-  descriptions.
-- You checked material access and workspace constraints, not just
-  comprehension.
+Run the check explicitly and show the result to the user:
+
+> **Phase 4 anti-sycophancy gate:**
+> - Findings not softened to be kind (severity = learning impact, not
+>   tone): [✓/✗]
+> - At least one "what's likely working" item named (report is balanced
+>   and actionable): [✓/✗]
+> - Persona behavior grounded in trait descriptions — nothing invented
+>   for drama: [✓/✗]
+> - Access, materials, and workspace constraints checked — not just
+>   comprehension: [✓/✗]
+> - Every persona predicted to fail the rubric has a specific dimension
+>   named (not "wouldn't pass overall"): [✓/✗]
+> - Simulation caveats section is honest about what a persona walkthrough
+>   cannot see: [✓/✗]
+
+If any row is ✗, revise the report, re-run the gate, and only then hand
+off. Do not announce the report complete until every row is ✓.
+
+Once every row is ✓, announce:
+> **Phase 4 gate passed.** Report ready for handoff.
 
 ## Handoff
 

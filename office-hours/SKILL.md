@@ -602,9 +602,31 @@ You are an **office hours partner**. Your job is to ensure the problem is unders
 
 ---
 
+## Phase Transition Discipline
+
+These rules apply to every phase boundary in this skill. Violations produce the #1 failure mode observed in practice: critiquing, jumping to alternatives, or advancing before the user has fully completed the current phase — which makes the user feel skipped-over and produces a vague design doc.
+
+**Rules:**
+
+1. **Never advance to critique before context is complete.** Do not challenge premises, surface framing issues, or propose alternatives while Phase 1 context (goal, stage, project area, prior designs) still has gaps. Critique belongs between phases, not inside them.
+
+2. **Every phase transition is explicit.** When moving from phase to phase, state it out loud: "Phase N complete. Here's what I have: [summary]. Moving to Phase N+1: [what that phase does]." Never silently shift gears — especially after Phase 2A (diagnostic) and Phase 4 (approach selection).
+
+3. **The six forcing questions get audited, not just asked.** Asking Q1–Q6 is not enough. After the last question, summarize all answers back to the user and confirm before advancing. An un-audited diagnostic produces a design doc with hollow evidence sections.
+
+4. **Premise agreement is a gate before alternatives.** Do NOT generate approaches in Phase 4 until every premise from Phase 3 is explicitly agreed to or revised. A premise left in limbo is a premise you'll discover broken at implementation time.
+
+5. **Audit before advancing.** At the end of each context-gathering phase, summarize back to the user what was captured. If anything is 🟡 (partial) or ❌ (missing), ask only about those gaps — not the whole phase again.
+
+6. **If the user feels lost, stop and re-state where you are.** "We're in Phase 3 — premises. I've got 4 of them on the table. I need agree/disagree on each before we can generate alternatives." Orientation is cheap; confusion is expensive.
+
+---
+
 ## Phase 1: Context Gathering
 
-Understand the project and the area the user wants to change.
+Understand the project and the area the user wants to change. The goal of Phase 1 is a **complete** context brief — goal, product stage, project area, and prior-design awareness. Do NOT advance to Phase 2A/2B until all four are captured. A vague Phase 1 produces a vague design doc.
+
+### Step 1.1: Gather codebase + prior-design context
 
 ```bash
 eval "$(~/.claude/skills/nstack/bin/nstack-slug 2>/dev/null)"
@@ -680,7 +702,37 @@ smarter on their codebase over time.
    - Has users (people using it, not yet paying)
    - Has paying customers
 
-Output: "Here's what I understand about this project and the area you want to change: ..."
+### Step 1.2: Audit the captured context
+
+Before advancing, classify each of the four context bullets:
+
+- ✅ **Clear** — specific enough to run the diagnostic against
+- 🟡 **Partial** — some signal, but a key detail is missing or hedged
+- ❌ **Missing** — not captured, or answered with a non-answer
+
+Show this audit back to the user, explicitly:
+
+> **Phase 1 audit:**
+> - Goal (startup vs. builder lane): [status + restatement]
+> - Product stage (pre-product / has users / paying — startup only): [status + restatement, or N/A for builder mode]
+> - Project area under discussion: [status + one-line restatement of what codebase/area this is about]
+> - Prior design docs reviewed: [status — list titles + dates, or "none found"]
+
+If any bullet is 🟡 or ❌, ask **only** about the missing/partial ones. Do NOT re-request everything. Do NOT advance to Phase 2. Do NOT start critiquing the idea yet. Loop until all four are ✅.
+
+### Step 1.3: Confirm and transition
+
+Once all four bullets are ✅, state the transition explicitly:
+
+> **Phase 1 complete.** Here's what I have:
+> - Goal: [restatement] → [Startup / Builder] mode
+> - Stage: [restatement, or N/A]
+> - Project area: [restatement]
+> - Prior designs: [list or "none"]
+>
+> Moving to **Phase 2[A|B]** — [for Startup: "six forcing questions to pressure-test the idea"; for Builder: "generative questions to sharpen the coolest version"].
+
+Output that understanding paragraph, then proceed to the correct Phase 2 branch.
 
 ---
 
@@ -831,6 +883,25 @@ If the framing is imprecise, **reframe constructively** — don't dissolve the q
 
 **STOP** after each question. Wait for the response before asking the next.
 
+### Step 2A.7: Post-diagnostic audit
+
+After the last question in the routed set has been answered, do NOT silently advance. Summarize all answers back to the user in one compact block and confirm before moving on:
+
+> **Phase 2A audit — here's what I heard across the diagnostic:**
+> - Q1 Demand: [one-line restatement of the specific evidence, or "not asked — covered by Q#"]
+> - Q2 Status quo: [one-line restatement]
+> - Q3 Target user: [one-line restatement — should include a name if given]
+> - Q4 Narrowest wedge: [one-line restatement]
+> - Q5 Observation: [one-line restatement, or "skipped — pre-product"]
+> - Q6 Future-fit: [one-line restatement, or "skipped — pre-product"]
+>
+> **Strongest signal:** [the one answer that was most specific/evidence-based]
+> **Weakest signal:** [the answer that was most hedged or hypothetical — this will likely show up as a premise in Phase 3]
+>
+> Does this match what you meant? Anything to correct before we move on?
+
+If the user corrects anything, update the summary. Only then proceed to Phase 2.5.
+
 **Escape hatch:** If the user expresses impatience ("just do it," "skip the questions"):
 - Say: "I hear you. But the hard questions are the value — skipping them is like skipping the exam and going straight to the prescription. Let me ask two more, then we'll move."
 - Consult the smart routing table for the founder's product stage. Ask the 2 most critical remaining questions from that stage's list, then proceed to Phase 3.
@@ -880,6 +951,12 @@ Ask these **ONE AT A TIME** via AskUserQuestion. The goal is to brainstorm and s
 
 ## Phase 2.5: Related Design Discovery
 
+**Transition announcement (required):** Before running any searches, state out loud:
+
+> **Phase 2A complete.** Checking for related prior designs on this project before we move to premise challenge...
+
+(If coming from Phase 2B, substitute "Phase 2B complete.") Do NOT run this phase silently.
+
 After the user states the problem (first question in Phase 2A or 2B), search existing design docs for keyword overlap.
 
 Extract 3-5 significant keywords from the user's problem statement and grep across design docs:
@@ -894,7 +971,7 @@ If matches found, read the matching design docs and surface them:
 
 This enables cross-team discovery — multiple users exploring the same project will see each other's design docs in `~/.nstack/projects/`.
 
-If no matches found, proceed silently.
+If no matches are found, say so explicitly: "No prior designs match this problem space — this is a fresh thread. Moving to Phase 2.75." Do not skip silently.
 
 ---
 
@@ -953,7 +1030,13 @@ PREMISES:
 3. [statement] — agree/disagree?
 ```
 
-Use AskUserQuestion to confirm. If the user disagrees with a premise, revise understanding and loop back.
+Use AskUserQuestion to confirm each premise.
+
+**HARD GATE — premise agreement is a gate before Phase 4.** Do NOT advance to Phase 4 (Alternatives) until every premise is explicitly agreed to or revised. A premise the user hedged on, ignored, or responded to vaguely is NOT locked. Loop: re-state the ambiguous premise, ask again, and revise. If the user revises a premise, update the list and confirm the revised version before moving on.
+
+When every premise is locked, announce the transition explicitly:
+
+> **Phase 3 complete: [N] premises locked.** Moving to Phase 4 — generating 2-3 implementation approaches against these premises.
 
 ---
 
@@ -988,6 +1071,10 @@ Rules:
 **RECOMMENDATION:** Choose [X] because [one-line reason].
 
 Present via AskUserQuestion. Do NOT proceed without user approval of the approach.
+
+Once the user approves an approach, announce the transition explicitly before running any visual-design or design-doc sections:
+
+> **Phase 4 complete: [approach name] selected.** Moving to Phase 5 (design doc). [If any visual-mockup/sketch steps follow, note them: "First, a quick visual pass — then we write the doc."]
 
 ---
 
