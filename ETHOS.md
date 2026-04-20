@@ -136,7 +136,7 @@ struggling learners.
 
 ## 9. Boil the Lake
 
-Borrowed from nstack. AI-assisted building makes the marginal cost of
+Borrowed from gstack. AI-assisted building makes the marginal cost of
 completeness near-zero. When the complete implementation costs minutes
 more than the shortcut — do the complete thing.
 
@@ -149,7 +149,7 @@ curriculum overhaul. Boil lakes. Flag oceans as out of scope.
 
 ## 10. Search Before Building
 
-Also borrowed from nstack. Before building anything involving unfamiliar
+Also borrowed from gstack. Before building anything involving unfamiliar
 patterns — stop and search first. Does an existing curriculum already teach
 this? Does an open resource already explain it? Is there a known best
 practice for this age group with this tool?

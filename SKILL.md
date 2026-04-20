@@ -43,6 +43,22 @@ corresponding skill instead of answering directly.
   substitutions, PPE, ventilation, "review for safety"
   → invoke `/maker-safety`
 
+### App Design Layer (product design)
+
+- "How should this feature work," flow design, screen design, "design
+  the flow for X," what happens on error, edge states, interactions
+  → invoke `/ux-architect`
+
+- "Test this design with users," persona walkthrough for the app, UX
+  review, friction check, accessibility review, "would users understand
+  this," pressure-test the flow
+  → invoke `/app-critique`
+
+- Motivation design, progress system, "how do we keep learners going,"
+  stall recovery, goal tracking, gamification review, feedback loops,
+  "what happens when they quit"
+  → invoke `/goal-design`
+
 ### Product Layer (app building)
 
 - Product ideas, "is this worth building," brainstorming, feature scoping

@@ -63,6 +63,14 @@ steps, all designed backward from the summative task.
 /maker-safety          Safety review for home settings
 ```
 
+### App Design Layer (product design — Cowork)
+
+```
+/ux-architect          Flow and interaction design — forcing questions, state maps, edge states
+/app-critique          Persona-based UX review — 6 personas test flows for friction and accessibility
+/goal-design           Motivation and progress system — feedback loops, stall recovery, autonomy
+```
+
 ### Product Layer (app building — Claude Code)
 
 ```
@@ -90,13 +98,19 @@ steps, all designed backward from the summative task.
 
 ## Skill Routing
 
-See SKILL.md for the full routing table. Key education routes:
+See SKILL.md for the full routing table. Key routes:
 
+**Education layer:**
 - Learning objectives, pedagogy, "design a lesson" → `/learning-architect`
 - Lesson content, project guides, "write the module" → `/curriculum-dev`
 - "Would a learner understand this?", pressure-test → `/student-sim`
 - Standards alignment, transcripts, state reporting → `/standards-check`
 - Tool safety, materials review, age-appropriate → `/maker-safety`
+
+**App design layer:**
+- "How should this feature work," flow design, edge states → `/ux-architect`
+- "Test this design with users," UX review, accessibility → `/app-critique`
+- Motivation design, progress system, stall recovery → `/goal-design`
 
 ## Commands
 

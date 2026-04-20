@@ -11,6 +11,8 @@ description: |
   or "is this ambitious enough".
   Proactively suggest when the user is questioning scope or ambition of a plan,
   or when the plan feels like it could be thinking bigger. (nstack)
+  For learning platform features, the '10-star product' means: what does a 10-star
+  learning experience look like for a self-directed teen working alone at home?
 benefits-from: [office-hours]
 allowed-tools:
   - Read
@@ -923,6 +925,8 @@ Rules:
 3. Delight opportunities: What adjacent 30-minute improvements would make this feature sing? Things where a user would think "oh nice, they thought of that." List at least 5.
 4. **Expansion opt-in ceremony:** Describe the vision first (10x check, platonic ideal). Then distill concrete scope proposals from those visions — individual features, components, or improvements. Present each proposal as its own AskUserQuestion. Recommend enthusiastically — explain why it's worth doing. But the user decides. Options: **A)** Add to this plan's scope **B)** Defer to TODOS.md **C)** Skip. Accepted items become plan scope for all remaining review sections. Rejected items go to "NOT in scope."
 
+**Education lens:** For learning features, the 10-star product test becomes: (1) The learner masters the concept without needing a teacher to explain it. (2) The physical project they build is genuinely impressive — something they'd proudly show friends and family. (3) The parent's only role was logistics (buying materials, ensuring safety), not instruction. (4) The learner can articulate what they learned and why it matters, not just follow steps. If the plan doesn't aim for all four, it's not thinking big enough.
+
 **For SELECTIVE EXPANSION** — run the HOLD SCOPE analysis first, then surface expansions:
 1. Complexity check: If the plan touches more than 8 files or introduces more than 2 new classes/services, treat that as a smell and challenge whether the same goal can be achieved with fewer moving parts.
 2. What is the minimum set of changes that achieves the stated goal? Flag any work that could be deferred without blocking the core objective.
@@ -1076,6 +1080,8 @@ Present four options:
 2. **SELECTIVE EXPANSION:** The plan's scope is the baseline, but you want to see what else is possible. Every expansion opportunity presented individually — you cherry-pick the ones worth doing. Neutral recommendations.
 3. **HOLD SCOPE:** The plan's scope is right. Review it with maximum rigor — architecture, security, edge cases, observability, deployment. Make it bulletproof. No expansions surfaced.
 4. **SCOPE REDUCTION:** The plan is overbuilt or wrong-headed. Propose a minimal version that achieves the core goal, then review that.
+
+**For education content plans:** SELECTIVE EXPANSION is usually right. The core learning objectives (Stage 1) and summative assessment (Stage 2) should be locked. Expansion opportunities are in the learning plan (Stage 3) — richer scaffolding, better formative checkpoints, more engaging content delivery.
 
 Context-dependent defaults:
 * Greenfield feature → default EXPANSION

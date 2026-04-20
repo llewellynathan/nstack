@@ -654,6 +654,26 @@ matches a past learning, display:
 This makes the compounding visible. The user should see that nstack is getting
 smarter on their codebase over time.
 
+## Learner Persona Test Scenarios
+
+In addition to standard QA testing, run these persona-based scenarios when testing
+learning content or learner-facing features:
+
+- **15-year-old self-directed learner** — Can they navigate the content without adult
+  help? Is the reading level appropriate? Do instructions assume prior knowledge they
+  may not have?
+- **Parent managing a homeschool curriculum** — Can they see progress, understand
+  rubrics, and find materials lists without confusion? Is the parent role clearly
+  logistics/safety, not instruction?
+- **13-year-old first-time maker** — Are safety warnings prominent before tool use?
+  Are materials and tools age-appropriate? Does the project guide explain every step
+  without assuming shop class experience?
+
+These personas supplement (not replace) standard QA flows. When testing learner-facing
+pages, mentally simulate each persona and flag issues specific to their experience.
+
+---
+
 ## Test Plan Context
 
 Before falling back to git diff heuristics, check for richer test plan sources:

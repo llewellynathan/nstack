@@ -921,6 +921,9 @@ RESTRICTED (breach = legal liability):
   - Passwords/credentials: [where stored, how protected]
   - Payment data: [where stored, PCI compliance status]
   - PII: [what types, where stored, retention policy]
+  - COPPA compliance: [age gate implementation, parental consent mechanism,
+    data collection from users under 13, retention/deletion policy for minors' data,
+    verifiable parental consent method (email-plus, signed form, payment verification)]
 
 CONFIDENTIAL (breach = business damage):
   - API keys: [where stored, rotation policy]

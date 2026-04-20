@@ -3,7 +3,7 @@ name: autoplan
 preamble-tier: 3
 version: 1.0.0
 description: |
-  Auto-review pipeline — reads the full CEO, design, eng, and DX review skills from disk
+  Auto-review pipeline — reads the full CEO, design, eng, DX, and education review skills from disk
   and runs them sequentially with auto-decisions using 6 decision principles. Surfaces
   taste decisions (close approaches, borderline scope, codex disagreements) at a final
   approval gate. One command, fully reviewed plan out.
@@ -722,7 +722,7 @@ preference." The user still decides, but the framing is appropriately urgent.
 
 ## Sequential Execution — MANDATORY
 
-Phases MUST execute in strict order: CEO → Design → Eng → DX.
+Phases MUST execute in strict order: CEO → Design → Eng → DX → Education (if learning content in scope).
 Each phase MUST complete fully before the next begins.
 NEVER run phases in parallel — each builds on the previous.
 
@@ -821,6 +821,11 @@ Then prepend a one-line HTML comment to the plan file:
   a developer tool (the plan describes something developers install, integrate, or build
   on top of) or if an AI agent is the primary user (OpenClaw actions, Claude Code skills,
   MCP servers).
+- Detect education scope: grep the plan for learning-related terms (learner, student,
+  curriculum, lesson, module, rubric, assessment, backward design, UbD, learning objective,
+  summative, formative, scaffolding, maker, project guide, materials list). Require 2+ matches.
+  Also trigger education scope if the plan involves content that teens/young adults will
+  learn from.
 
 ### Step 3: Load skill files from disk
 
@@ -829,6 +834,9 @@ Read each file using the Read tool:
 - `~/.claude/skills/nstack/plan-design-review/SKILL.md` (only if UI scope detected)
 - `~/.claude/skills/nstack/plan-eng-review/SKILL.md`
 - `~/.claude/skills/nstack/plan-devex-review/SKILL.md` (only if DX scope detected)
+- `~/.claude/skills/nstack/learning-architect/SKILL.md` (only if education scope detected)
+- `~/.claude/skills/nstack/student-sim/SKILL.md` (only if education scope detected)
+- `~/.claude/skills/nstack/maker-safety/SKILL.md` (only if education scope detected)
 
 **Section skip list — when following a loaded skill file, SKIP these sections
 (they are already handled by /autoplan):**
@@ -847,7 +855,7 @@ Read each file using the Read tool:
 
 Follow ONLY the review-specific methodology, sections, and required outputs.
 
-Output: "Here's what I'm working with: [plan summary]. UI scope: [yes/no]. DX scope: [yes/no].
+Output: "Here's what I'm working with: [plan summary]. UI scope: [yes/no]. DX scope: [yes/no]. Education scope: [yes/no].
 Loaded review skills from disk. Starting full review pipeline with auto-decisions."
 
 ---
@@ -1150,7 +1158,7 @@ Missing voice = N/A (not CONFIRMED). Single critical finding from one voice = fl
 **PHASE 3 COMPLETE.** Emit phase-transition summary:
 > **Phase 3 complete.** Codex: [N concerns]. Claude subagent: [N issues].
 > Consensus: [X/6 confirmed, Y disagreements → surfaced at gate].
-> Passing to Phase 3.5 (DX Review) or Phase 4 (Final Gate).
+> Passing to Phase 3.5 (DX Review), Phase 3.75 (Education Review), or Phase 4 (Final Gate).
 
 ---
 
@@ -1251,6 +1259,35 @@ Missing voice = N/A (not CONFIRMED). Single critical finding from one voice = fl
 > **Phase 3.5 complete.** DX overall: [N]/10. TTHW: [N] min → [target] min.
 > Codex: [N concerns]. Claude subagent: [N issues].
 > Consensus: [X/6 confirmed, Y disagreements → surfaced at gate].
+> Passing to Phase 4 (Final Gate).
+
+---
+
+## Phase 3.75: Education Review (conditional — skip if no learning content scope)
+
+When education scope is detected, run a lightweight education review using the loaded
+education skill files. This is NOT a full curriculum development pass — it checks that
+the plan's learning content decisions are sound.
+
+**Skip condition:** If education scope was NOT detected in Phase 0, skip this phase entirely.
+Log: "Phase 3.75 skipped — no learning content scope detected."
+
+**Review checklist:**
+1. **Learning objectives**: Does the plan specify what learners should know/be able to do?
+   If vague ("students will understand circuits"), push for measurable outcomes.
+2. **Assessment alignment**: Is there a summative task (physical artifact)? Does it trace
+   back to the learning objectives? (Check against /learning-architect methodology.)
+3. **Safety review**: Does the plan involve physical tools or materials? If yes, flag for
+   /maker-safety review. Auto-decide: any plan involving physical making needs a safety pass.
+4. **Age appropriateness**: Is the content pitched at the right level for 13-20 year olds?
+   Reading level, cognitive load, assumed prior knowledge.
+5. **Independence check**: Can a learner complete this without a trained teacher?
+   The parent role is logistics and safety, not instruction.
+
+Auto-decide using the 6 principles. Surface taste decisions at the final gate.
+
+**PHASE 3.75 COMPLETE.** Emit phase-transition summary:
+> **Phase 3.75 complete.** Education review: [N findings]. [M auto-decided].
 > Passing to Phase 4 (Final Gate).
 
 ---
@@ -1372,6 +1409,7 @@ I recommend [X] — [principle]. But [Y] is also viable:
 - Eng Voices: Codex [summary], Claude subagent [summary], Consensus [X/6 confirmed]
 - DX: [summary or "skipped, no developer-facing scope"]
 - DX Voices: Codex [summary], Claude subagent [summary], Consensus [X/6 confirmed] (or "skipped")
+- Education: [summary or "skipped, no learning content scope"]
 
 ### Cross-Phase Themes
 [For any concern that appeared in 2+ phases' dual voices independently:]
@@ -1461,4 +1499,4 @@ Suggest next step: `/ship` when ready to create the PR.
 - **Log every decision.** No silent auto-decisions. Every choice gets a row in the audit trail.
 - **Full depth means full depth.** Do not compress or skip sections from the loaded skill files (except the skip list in Phase 0). "Full depth" means: read the code the section asks you to read, produce the outputs the section requires, identify every issue, and decide each one. A one-sentence summary of a section is not "full depth" — it is a skip. If you catch yourself writing fewer than 3 sentences for any review section, you are likely compressing.
 - **Artifacts are deliverables.** Test plan artifact, failure modes registry, error/rescue table, ASCII diagrams — these must exist on disk or in the plan file when the review completes. If they don't exist, the review is incomplete.
-- **Sequential order.** CEO → Design → Eng → DX. Each phase builds on the last.
+- **Sequential order.** CEO → Design → Eng → DX → Education. Each phase builds on the last.
